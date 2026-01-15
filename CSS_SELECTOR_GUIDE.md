@@ -99,8 +99,11 @@ cy.get('tr:nth-child(odd)')
 cy.get('tr:nth-child(even)')
 
 // Contains text
-cy.contains('Submit')
-cy.contains('button', 'Submit')
+cy.contains('Submit')  // Find any element with text 'Submit'
+cy.contains('button', 'Submit')  // Find button with text 'Submit'
+cy.contains('Sign Up')  // Case sensitive by default
+cy.contains(/sign up/i)  // Case insensitive with regex
+cy.get('.product-name').contains('Strawberry')  // Within specific selector
 
 // Enabled/Disabled
 cy.get('input:enabled')
@@ -127,14 +130,32 @@ cy.get('div:has(> img)')
 
 ## Cypress-Specific Best Practices
 
-### 1. Use `.contains()` for text
+### 1. Use `.contains()` for text-based selection
 ```javascript
-// Good
+// ✅ Good - Direct contains
 cy.contains('Sign Up').click()
 cy.contains('button', 'Sign Up').click()
 
-// Avoid
-cy.get('button').contains('Sign Up')
+// ✅ Good - Contains with selector scope
+cy.get('.modal').contains('Confirm').click()
+cy.get('table tbody tr').contains('Active')
+
+// ✅ Good - Case insensitive with regex
+cy.contains(/sign up/i).click()
+
+// ✅ Good - Partial text match
+cy.contains('Continue')  // Matches "Continue Shopping"
+
+// ✅ Good - Extract text and verify
+cy.get('p.product-name').each(($el) => {
+  const text = $el.text()
+  if(text.includes('Strawberry')){
+    cy.log('Found Strawberry')
+  }
+})
+
+// ❌ Avoid - Chaining contains after get
+cy.get('button').contains('Sign Up')  // Less efficient
 ```
 
 ### 2. Chain commands
@@ -164,6 +185,39 @@ cy.get('form input[name="email"]')
 ```
 
 ## Common Patterns
+
+### Text-Based Selection
+```javascript
+// Find element by exact text
+cy.contains('Add to Cart').click()
+
+// Find specific element type with text
+cy.contains('button', 'Submit')
+cy.contains('a', 'Learn More')
+
+// Case insensitive text search
+cy.contains(/login/i)
+
+// Partial text match
+cy.get('.card').contains('Special Offer')
+
+// Verify text in list/each loop
+cy.get('.items').each(($item) => {
+  const itemText = $item.text()
+  if(itemText.includes('Active')){
+    cy.wrap($item).should('be.visible')
+  }
+})
+
+// Extract and compare text
+cy.get('h1').invoke('text').should('include', 'Welcome')
+
+// Get text for validation
+cy.get('.product-name:visible').each(($el) => {
+  const productName = $el.text()
+  expect(productName).to.include('Berry')
+})
+```
 
 ### Forms
 ```javascript

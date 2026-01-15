@@ -6,7 +6,7 @@
     it('Navigate to URL', function()
     {
 // test step1
-    cy.visit("https://rahulshettyacademy.com/seleniumPractise/#/");
+    cy.visit("https://rahulshettyacademy.com/seleniumPractise/#/")
     cy.get('.search-keyword').type('ca')
 
 // Using Aliasing
