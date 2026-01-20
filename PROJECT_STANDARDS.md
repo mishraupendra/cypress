@@ -10,7 +10,7 @@ CypressRS/
 │   ├── downloads/             # Downloaded files during tests
 │   ├── e2e/                   # ✅ Modern: Test files (use this)
 │   │   ├── auth/
-│   │   │   ├── login.cy.js
+│   │   │   ├── login.c y.js
 │   │   │   └── signup.cy.js
 │   │   ├── dashboard/
 │   │   │   └── dashboard.cy.js
@@ -348,21 +348,56 @@ npm install cypress@latest --save-dev
 ## Quick Commands Reference
 
 ```bash
-# Run all tests
+# Run all tests (headless mode with video recording)
 npm run cypress:run
+npx cypress run
 
-# Open Cypress UI
+# Open Cypress UI (interactive mode - no video recording)
 npm run cypress:open
+npx cypress open
 
-# Run specific test
-npx cypress run --spec "cypress/e2e/login.cy.js"
+# Run specific test with video recording
+npx cypress run --spec "cypress/e2e/validations/e2etest.cy.js"
 
-# Run tests in specific browser
+# Run tests WITHOUT video recording
+npx cypress run --video false
+
+# Run tests in specific browser with video
 npx cypress run --browser chrome
+npx cypress run --browser firefox
+npx cypress run --browser edge
+
+# Run tests and keep videos only for failed tests (default behavior)
+npx cypress run --config videoUploadOnPasses=false
+
+# Run tests and keep all videos
+npx cypress run --config videoUploadOnPasses=true
+
+# Disable screenshots on failure
+npx cypress run --config screenshotOnRunFailure=false
 
 # Check for issues
 npm audit
 ```
+
+### Video Recording Behavior
+
+**When Videos Are Recorded:**
+- ✅ Automatically recorded when running `npx cypress run` (headless mode)
+- ❌ NOT recorded when using `npx cypress open` (interactive mode)
+
+**Video Configuration (cypress.config.js):**
+```javascript
+video: true,                    // Enable/disable video recording
+videosFolder: 'cypress/videos', // Where videos are saved
+videoCompression: 32,           // Compression quality (0-51, lower = better)
+videoUploadOnPasses: false      // Only keep videos of failed tests
+```
+
+**Video Output Location:**
+- Videos saved to: `cypress/videos/`
+- Named after spec file: `e2etest.cy.js.mp4`
+- Automatically overwritten on each run
 
 ---
 

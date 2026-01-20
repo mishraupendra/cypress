@@ -33,9 +33,10 @@ describe('navigate to Website, add items and checkout',function(){
        cy.wait(2000)
 
        cy.get('select').select('India')
+
+       // Screenshot Syntax       
+       cy.screenshot('order-summary')
        
-// Screenshot Syntax       
-    //    cy.screenshot('order-summary')
        cy.get('.chkAgree').click()
 
        cy.get('button').click()
